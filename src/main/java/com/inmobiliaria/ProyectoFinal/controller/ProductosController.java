@@ -14,7 +14,7 @@ public class ProductosController{
     @PostMapping
     public String MostrarPorProductoPorId(@RequestParam("id_producto") String id_producto,Model model){
 
-
+       Productos productoService.TraerProductoPorId(id_producto);
 
         return "Redicet:/html/VerProducto"
 
