@@ -291,6 +291,8 @@
             </ul>
         </nav>
 
+        <!-- Este es un seccion que invoca ala la ruta 
+         localhost:8080/iniciar_sesion Por defecto es GET -->
         <a th:href="@{/iniciar_sesion}" class="btn-admin-login">
             <i class="fa-solid fa-lock"></i> Iniciar Sesión (Admin)
         </a>
@@ -317,34 +319,54 @@
 <section class="seccion" id="productos">
     <h2 class="titulo-seccion">Nuestros Muebles Destacados</h2>
     <div class="grid-productos">
-
-        <div class="producto-card">
-            <img src="https://images.unsplash.com/photo-1555041469-a586c61ea9bc?q=80&w=500" class="producto-imagen" alt="Sofá">
+<div class="productos-contenedor">
+        
+        <div class="producto-card" th:each="prod : ${productos}">
+            <img th:src="${prod.imagenReferencia}" class="producto-imagen" th:alt="${prod.descripcion}">
+            
             <div class="producto-info">
-                <h3 class="producto-titulo">Sofá Seccional Premium Tela Gris</h3>
-                <div class="producto-precio">S/ 2,499.00</div>
-                <a href="#" class="btn-agregar-carrito">Añadir al carrito</a>
+                <h3 class="producto-titulo" th:text="${prod.descripcion}">Nombre del Producto</h3>
+                
+                <div class="producto-precio" th:text="'S/ ' + ${#numbers.formatDecimal(prod.precio, 1, 2)}">S/ 0.00</div>
+                
+                <a th:href="@{/carrito/agregar(id=${prod.idProducto})}" class="btn-agregar-carrito">Añadir al carrito</a>
             </div>
+            
         </div>
 
-        <div class="producto-card">
-            <img src="https://images.unsplash.com/photo-1577140917170-285929fb55b7?q=80&w=500" class="producto-imagen" alt="Mesa">
-            <div class="producto-info">
-                <h3 class="producto-titulo">Mesa de Comedor Extensible Madera Roble</h3>
-                <div class="producto-precio">S/ 1,850.00</div>
-                <a href="#" class="btn-agregar-carrito">Añadir al carrito</a>
-            </div>
-        </div>
+    </div>
+    </div>
+</section>
 
-        <div class="producto-card">
-            <img src="https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?q=80&w=500" class="producto-imagen" alt="Cama">
-            <div class="producto-info">
-                <h3 class="producto-titulo">Cama Queen Size con Cabecera Tapizada</h3>
-                <div class="producto-precio">S/ 3,120.00</div>
-                <a href="#" class="btn-agregar-carrito">Añadir al carrito</a>
+<section class="section" id="ofertas">
+    <h2 class="seccion-titulo">Combos y Ofertas Especiales</h2>
+    
+    <div class="ofertas-contenedor">
+        
+        <div class="oferta-card" th:each="ofe : ${ofertas}">
+            
+            <div class="oferta-info">
+                <h3 class="oferta-titulo" th:text="'Combo Especial N° ' + ${ofe.idOferta}">Combo Promocional</h3>
+                
+                <div class="oferta-incluye">
+                    <p><strong>Incluye:</strong></p>
+                    <ul>
+                        <li th:each="det : ${ofe.detalles}">
+                            <span th:text="${det.cantidad} + 'x ' + ${det.producto.descripcion}">1x Sofá Gris</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="oferta-precio" th:text="'S/ ' + ${#numbers.formatDecimal(ofe.precioOferta, 1, 2)}">S/ 0.00</div>
+                
+                <form th:action="@{/comprarOferta}" method="POST">
+                    <input type="hidden" name="id_oferta" th:value="${ofe.idOferta}" />
+                    <button type="submit" class="btn-comprar-oferta">Comprar Oferta Express</button>
+                </form>
             </div>
+            
         </div>
-
+        
     </div>
 </section>
 

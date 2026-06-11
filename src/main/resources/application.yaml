@@ -3,16 +3,16 @@ spring:
     name: ProyectoFinal
 
   datasource:
-    url: jdbc:mysql://localhost:3306/empresa_muebles
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    username: root
-    password: '961508'
+    url:      jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1;MODE=MySQL              # jdbc:mysql://localhost:3306/empresa_muebles
+    driver-class-name: org.h2.Driver #com.mysql.cj.jdbc.Driver
+    username:  sa #root
+    password: # '961508'
 
   jpa:
-    database-platform: org.hibernate.dialect.MySQLDialect
+    database-platform: org.hibernate.dialect.H2Dialect #org.hibernate.dialect.MySQLDialect
     show-sql: true
     hibernate:
-      ddl-auto: validate
+      ddl-auto:  update # validate
 
     implicit-naming-strategy: org.hibernate.boot.model.naming.ImplicitNamingStrategyLegacyJpaImpl
     physical-naming-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl

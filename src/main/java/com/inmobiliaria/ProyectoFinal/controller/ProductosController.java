@@ -1,8 +1,16 @@
 package com.inmobiliaria.ProyectoFinal.controller;
+import com.inmobiliaria.ProyectoFinal.service.*;
+import com.inmobiliaria.ProyectoFinal.entity.*;
+import org.springframework.stereotype.Controller;
+
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
-@RequestMapping("productos")
+//@RequestMapping("productos")
 public class ProductosController{
+
 
     private final ProductoService productoService;
 
@@ -13,10 +21,28 @@ public class ProductosController{
 
     @PostMapping
     public String MostrarPorProductoPorId(@RequestParam("id_producto") String id_producto,Model model){
+        int id=Integer.parseInt(id_producto);
 
-       Productos productoService.TraerProductoPorId(id_producto);
+          Productos p=productoService.TraerProductoPorId(id);
 
-        return "Redicet:/html/VerProducto"
+        return "Redicet:/html/VerProducto";
 
     }
+
+
+   
+
+
+    @GetMapping("/") // O la ruta que prefieras para el catálogo
+public String ListarProductos(Model model) {
+    // 1. Obtenemos la lista desde el servicio
+    List<Productos> listaDeProductos = productoService.listar();
+    
+    // 2. La enviamos a la vista con el nombre "productos"
+    model.addAttribute("productos", listaDeProductos);
+    
+    // 3. Retornamos el nombre de la plantilla HTML (ej: index.html)
+    return "index"; 
+}
+  
 }

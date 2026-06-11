@@ -10,9 +10,9 @@ public class LoginController{
                               @RequestParam("password") String password)
     {
         if(TienePermizo(user,password)){
-            return "redirect: /html/Administrador"
+            return "redirect: /html/Administrador";
         }else{
-            return "redirect/html/Login"
+            return "redirect/html/Login";
 
         }
 
@@ -20,6 +20,6 @@ public class LoginController{
     }
     @GetMapping()
     public String irALogin(){
-        return "redirect:/html/Login"
+        return "redirect:/html/Login";
     }
 }
