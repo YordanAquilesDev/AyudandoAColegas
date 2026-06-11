@@ -1,10 +1,145 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel de Ofertas - MVP</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background-color: #f4f6f9;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            margin-bottom: 20px;
+        }
+        .btn {
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 14px;
+        }
+        .btn-primary { background-color: #007bff; color: white; }
+        .btn-success { background-color: #28a745; color: white; }
+        .btn-info { background-color: #17a2b8; color: white; }
+        
+        /* Formulario rápido para Crear Oferta (MVP) */
+        .form-crear {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        .form-group {
+            display: inline-block;
+            margin-right: 15px;
+        }
+        .form-group input {
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        /* Tabla de Ofertas */
+        .tabla-ofertas {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        .tabla-ofertas th, .tabla-ofertas td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+        .tabla-ofertas th {
+            background-color: #343a40;
+            color: white;
+        }
+        .tabla-ofertas tr:hover {
+            background-color: #f8f9fa;
+        }
+        .acciones {
+            display: flex;
+            gap: 10px;
+        }
+    </style>
 </head>
 <body>
+
+<div class="container">
+
+    <div class="header">
+        <h1>Módulo de Ofertas (MVP)</h1>
+        <a href="/Ofertas/listar" class="btn btn-primary">🔄 Actualizar Lista</a>
+    </div>
+
+    <div class="form-crear">
+        <h3>Crear Nueva Oferta Rápida</h3>
+        <form th:action="@{/Ofertas/GuardarOferta}" method="POST">
+            <div class="form-group">
+                <input type="number" name="idOferta" placeholder="ID de Oferta" required>
+            </div>
+            <div class="form-group">
+                <input type="number" step="0.01" name="precioOferta" placeholder="Precio Especial (S/)" required>
+            </div>
+            <button type="submit" class="btn btn-success">+ Guardar Oferta</button>
+        </form>
+    </div>
+
+    <h2>Ofertas Disponibles</h2>
+    <table class="tabla-ofertas">
+        <thead>
+            <tr>
+                <th>ID Oferta</th>
+                <th>Precio de la Oferta</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:if="${#lists.isEmpty(ofertas)}">
+                <td colspan="3" style="text-align: center; color: #777;">No hay ofertas disponibles en este momento.</td>
+            </tr>
+
+            <tr th:each="o : ${ofertas}">
+                <td th:text="${o.idOferta}">1</td>
+                <td th:text="'S/ ' + ${o.precioOferta}">S/ 0.00</td>
+                <td class="acciones">
+                    
+                    <a th:href="@{/Ofertas/mostrar_oferta(id_oferta=${o.idOferta})}" class="btn btn-info">
+                        🔍 Ver Detalles
+                    </a>
+
+                    <form th:action="@{/Ofertas/comprar/{id}(id=${o.idOferta})}" method="POST" style="margin:0;">
+                        <button type="submit" class="btn btn-success">
+                            🛒 Comprar
+                        </button>
+                    </form>
+
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+</div>
 
 </body>
 </html>

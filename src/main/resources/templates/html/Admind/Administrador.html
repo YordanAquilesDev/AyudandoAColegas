@@ -1,17 +1,305 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Panel Admin</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel de Administración - Mueblería</title>
+    <style>
+        :root {
+            --bg-color: #f4f6f9;
+            --card-color: #ffffff;
+            --text-dark: #2c3e50;
+            --primary: #8e44ad; /* Color elegante para mueblería/diseño */
+            --secondary: #2980b9;
+            --success: #27ae60;
+            --danger: #c0392b;
+            --warning: #f39c12;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-dark);
+            margin: 0;
+            display: flex;
+        }
+        /* Sidebar Estática */
+        .sidebar {
+            width: 260px;
+            background-color: #1a252f;
+            color: white;
+            height: 100vh;
+            position: fixed;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        .sidebar h2 { text-align: center; color: #ecf0f1; font-size: 22px; margin-bottom: 30px; }
+        .sidebar a {
+            display: block;
+            color: #bdc3c7;
+            padding: 12px 15px;
+            text-decoration: none;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            font-weight: 500;
+        }
+        .sidebar a:hover { background-color: var(--primary); color: white; }
+        
+        /* Contenedor Principal */
+        .main-content {
+            margin-left: 260px;
+            padding: 40px;
+            width: calc(100% - 260px);
+            box-sizing: border-box;
+        }
+        
+        /* Alertas */
+        .alert {
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 25px;
+            font-weight: 500;
+        }
+        .alert-success { background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+        .alert-danger { background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+
+        /* Tarjetas de Reporte Rápido */
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+        .metric-card {
+            background: var(--card-color);
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            border-left: 5px solid var(--primary);
+        }
+        .metric-card.ofertas { border-left-color: var(--warning); }
+        .metric-card h3 { margin: 0; font-size: 14px; color: #7f8c8d; text-transform: uppercase; }
+        .metric-card p { margin: 10px 0 0 0; font-size: 28px; font-weight: bold; }
+
+        /* Bloques de Gestión (Secciones) */
+        .management-section {
+            background: var(--card-color);
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            margin-bottom: 40px;
+        }
+        .management-section h2 { margin-top: 0; border-bottom: 2px solid #eee; padding-bottom: 10px; color: var(--primary); }
+        
+        /* Formularios en Grid de 2 o 3 Columnas */
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        .form-group { display: flex; flex-direction: column; }
+        .form-group label { font-size: 14px; font-weight: 600; margin-bottom: 5px; }
+        .form-group input, .form-group select {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        
+        /* Tablas de Datos */
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        .data-table th, .data-table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        .data-table th { background-color: #f8f9fa; font-weight: 600; }
+        .data-table tr:hover { background-color: #fdfefe; }
+        
+        /* Botones */
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 14px;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+        }
+        .btn-primary { background-color: var(--primary); color: white; }
+        .btn-primary:hover { background-color: #732d91; }
+        .btn-secondary { background-color: var(--secondary); color: white; }
+        .btn-danger { background-color: var(--danger); color: white; }
+        .btn-sm { padding: 5px 10px; font-size: 12px; }
+        
+        .badge {
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        .badge-warning { background-color: #ffeaa7; color: #d63031; }
+        .badge-success { background-color: #badc58; color: #6ab04c; }
+    </style>
 </head>
 <body>
-<div th:if="${mensajeExito}" style="color: green; background-color: #d4edda; padding: 10px; margin-bottom: 15px;">
-    <p th:text="${mensajeExito}"></p>
-</div>
 
-<div th:if="${mensajeError}" style="color: red; background-color: #f8d7da; padding: 10px; margin-bottom: 15px;">
-    <p th:text="${mensajeError}"></p>
-</div>
+    <div class="sidebar">
+        <h2>Muebles Admin</h2>
+        <a href="#metricas">📊 Cuadro de Mando</a>
+        <a href="#productos">🛋️ Inventario Muebles</a>
+        <a href="#ofertas">🏷️ Combos y Ofertas</a>
+        <a href="/Ofertas/listar" target="_blank">🌐 Ver Catálogo Público</a>
+    </div>
 
+    <div class="main-content">
+        
+        <div th:if="${mensajeExito}" class="alert alert-success">
+            <p th:text="${mensajeExito}" style="margin:0;"></p>
+        </div>
+        <div th:if="${mensajeError}" class="alert alert-danger">
+            <p th:text="${mensajeError}" style="margin:0;"></p>
+        </div>
+
+        <h1 id="metricas">Panel de Control del Negocio</h1>
+        <p style="color: #7f8c8d;">Bienvenido al sistema de administración de inventario y ofertas de muebles.</p>
+
+        <div class="metrics-grid">
+            <div class="metric-card">
+                <h3>Total Muebles en Stock</h3>
+                <p th:text="${productos != null ? #lists.size(productos) : '0'}">24</p>
+            </div>
+            <div class="metric-card ofertas">
+                <h3>Ofertas de Temporada</h3>
+                <p th:text="${ofertas != null ? #lists.size(ofertas) : '0'}">5</p>
+            </div>
+        </div>
+
+        <div class="management-section" id="productos">
+            <h2>🛋️ Gestión de Productos (Muebles)</h2>
+            
+            <form th:action="@{/Productos/GuardarProducto}" method="POST" style="margin-bottom: 30px;">
+                <h3>Registrar Nuevo Mueble</h3>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>ID Producto</label>
+                        <input type="number" name="idProducto" placeholder="Automático si es nuevo">
+                    </div>
+                    <div class="form-group">
+                        <label>Descripción / Nombre</label>
+                        <input type="text" name="descripcion" placeholder="Ej: Juego de Sala Seccional Cuero" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Precio Unitario (S/)</label>
+                        <input type="number" step="0.01" name="precio" placeholder="0.00" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Categoría</label>
+                        <select name="categoria.idCategoria" required>
+                            <option value="">-- Seleccionar --</option>
+                            <option th:each="cat : ${categorias}" 
+                                    th:value="${cat.idCategoria}" 
+                                    th:text="${cat.nombre}">Sala</option>
+                            <option th:if="${#lists.isEmpty(categorias)}" value="1">Salas y Sofás</option>
+                            <option th:if="${#lists.isEmpty(categorias)}" value="2">Comedores y Mesas</option>
+                            <option th:if="${#lists.isEmpty(categorias)}" value="3">Dormitorios</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>URL Imagen Referencia</label>
+                        <input type="text" name="imagenReferencia" placeholder="https://enlace-imagen.com/mueble.jpg">
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary">📦 Guardar Mueble en Almacén</button>
+            </form>
+
+            <h3>Muebles en la Base de Datos</h3>
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Descripción</th>
+                        <th>Categoría</th>
+                        <th>Precio Base</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:if="${#lists.isEmpty(productos)}">
+                        <td colspan="5" style="text-align: center; color: #95a5a6;">No hay muebles registrados. Usa el formulario de arriba.</td>
+                    </tr>
+                    <tr th:each="p : ${productos}">
+                        <td th:text="${p.idProducto}">101</td>
+                        <td font-weight="bold" th:text="${p.descripcion}">Sofá Cama Reclinable de Felpa</td>
+                        <td th:text="${p.categoria != null ? p.categoria.nombre : 'Sin Categoría'}">Dormitorio</td>
+                        <td th:text="'S/ ' + ${p.precio}">S/ 1200.00</td>
+                        <td>
+                            <a th:href="@{/Productos/editar(id=${p.idProducto})}" class="btn btn-secondary btn-sm">✏️ Editar</a>
+                            <a th:href="@{/Productos/eliminar(id=${p.idProducto})}" class="btn btn-danger btn-sm" onclick="return confirm('¿Eliminar este mueble?')">❌ Eliminar</a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+
+        <div class="management-section" id="ofertas">
+            <h2>🏷️ Control de Ofertas y Combos de Muebles</h2>
+            
+            <form th:action="@{/Ofertas/GuardarOferta}" method="POST" style="margin-bottom: 30px;">
+                <h3>Paso 1: Registrar Cabecera de Oferta Especial</h3>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Código / ID de la Oferta</label>
+                        <input type="number" name="idOferta" placeholder="Ej: 501" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Precio de Todo el Combo (S/)</label>
+                        <input type="number" step="0.01" name="precioOferta" placeholder="Ej: 2500.00 (Precio de Liquidación)" required>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary" style="background-color: var(--warning); color: #2c3e50;">📢 Publicar Precio Oferta</button>
+            </form>
+
+            <hr style="border: 0; border-top: 1px dashed #ccc; margin: 30px 0;">
+
+            <form th:action="@{/Ofertas/AgregarProductoAOferta}" method="POST" style="background: #fdfaf4; padding: 20px; border-radius: 6px; border: 1px solid #f1f1f1;">
+                <h3>Paso 2: Construir el Combo (Asociar Muebles a una Oferta)</h3>
+                <p style="font-size:13px; color: #7f8c8d; margin-top:-10px;">Selecciona qué muebles formarán parte del paquete especial creado en el Paso 1.</p>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Seleccionar Oferta Activa</label>
+                        <select name="oferta.idOferta" required>
+                            <option value="">-- Elige la Oferta --</option>
+                            <option th:each="o : ${ofertas}" 
+                                    th:value="${o.idOferta}" 
+                                    th:text="'Oferta #' + ${o.idOferta} + ' (S/ ' + ${o.precioOferta} + ')' ">Oferta #501</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Mueble a Incluir</label>
+                        <select name="producto.idProducto" required>
+                            <option value="">-- Elige el Mueble --</option>
+                            <option th:each="p : ${productos}" 
+                                    th:value="${p.idProducto}" 
+                                    th:text="${p.descripcion} + ' (Normal: S/ ' + ${p.precio} + ')'">Mesa de Centro Rústica</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Cantidad Incluida en Combo</label>
+                        <input type="number" name="cantidad" value="1" min="1" required>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-secondary">➕ Vincular Mueble al Combo</button>
+            </form>
+        </div>
+
+    </div>
 </body>
 </html>

@@ -28,21 +28,4 @@ public class ProductosController{
         return "Redicet:/html/VerProducto";
 
     }
-
-
-   
-
-
-    @GetMapping("/") // O la ruta que prefieras para el catálogo
-public String ListarProductos(Model model) {
-    // 1. Obtenemos la lista desde el servicio
-    List<Productos> listaDeProductos = productoService.listar();
-    
-    // 2. La enviamos a la vista con el nombre "productos"
-    model.addAttribute("productos", listaDeProductos);
-    
-    // 3. Retornamos el nombre de la plantilla HTML (ej: index.html)
-    return "index"; 
-}
-  
 }
