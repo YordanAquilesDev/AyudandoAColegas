@@ -31,6 +31,7 @@ public class CategoriaService {
 
         return categoriaRepository.save(categoria);
     }
+    
 
 
     public Categoria actualizar(Categoria categoria) {

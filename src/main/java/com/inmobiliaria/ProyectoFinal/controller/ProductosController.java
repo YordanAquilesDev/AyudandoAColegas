@@ -19,4 +19,16 @@ public class ProductosController{
         return "Redicet:/html/VerProducto"
 
     }
+@GetMapping
+public String traerProductosPorCategoria(@RequestParam("categoria") int idCategoria, Model model) {
+ 
+    List<Productos> listaProductos = productoService.listarPorCategoria(idCategoria);
+    
+  
+    model.addAttribute("productos", listaProductos);
+    
+   
+    return "Categorias"; 
+}
+
 }
