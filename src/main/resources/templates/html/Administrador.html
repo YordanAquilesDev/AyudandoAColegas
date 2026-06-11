@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Panel Admin</title>
+</head>
+<body>
+<div th:if="${mensajeExito}" style="color: green; background-color: #d4edda; padding: 10px; margin-bottom: 15px;">
+    <p th:text="${mensajeExito}"></p>
+</div>
+
+<div th:if="${mensajeError}" style="color: red; background-color: #f8d7da; padding: 10px; margin-bottom: 15px;">
+    <p th:text="${mensajeError}"></p>
+</div>
+
+</body>
+</html>
