@@ -28,11 +28,11 @@ public class HomeController {
             // Prueba 1: Comenta las líneas de los servicios una por una para ver cuál falla
             model.addAttribute("ofertas", ofertasService.obtenerTodasLasOfertas());
             model.addAttribute("productos", productoService.listarProductos());
-
+ String prueva;
             return "index";
         } catch (Exception e) {
             // Esto imprimirá el verdadero error limpio en tu consola de IntelliJ
-            System.out.println("❌ EL ERROR REAL ES: " + e.getMessage());
+            System.out.println(" EL ERROR REAL ES: " + e.getMessage());
             e.printStackTrace();
             return "error";
         }
