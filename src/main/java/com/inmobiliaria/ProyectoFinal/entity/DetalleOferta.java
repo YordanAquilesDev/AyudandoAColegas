@@ -1,10 +1,14 @@
 package com.inmobiliaria.ProyectoFinal.entity;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.List;
 @Entity
 @Table(name="detalle_oferta")
+@Getter
+@Setter
 public class DetalleOferta {
     @Id
     private int idDetalleOferta;

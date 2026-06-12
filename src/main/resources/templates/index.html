@@ -261,6 +261,108 @@
             background-color: var(--color-acento);
         }
 
+        /* --- 🌟 NUEVOS ESTILOS PARA LA SECCIÓN DE COMBOS Y OFERTAS --- */
+        .ofertas-contenedor {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+            gap: 30px;
+            margin-top: 20px;
+        }
+
+        .oferta-card {
+            background-color: white;
+            border: 2px dashed var(--color-acento); /* Borde distinguible de combo */
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 4px 15px rgba(180, 83, 9, 0.05);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .oferta-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(180, 83, 9, 0.12);
+        }
+
+        .oferta-titulo {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--color-principal);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .oferta-titulo::before {
+            content: '🔥';
+        }
+
+        .oferta-incluye {
+            background-color: #fffbeb; /* Fondo sutil cálido */
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-left: 4px solid var(--color-acento);
+        }
+
+        .oferta-incluye p {
+            font-size: 14px;
+            color: #78350f;
+            margin-bottom: 8px;
+        }
+
+        .oferta-incluye ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .oferta-incluye li {
+            font-size: 15px;
+            margin-bottom: 6px;
+            color: var(--color-texto);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .oferta-incluye li::before {
+            content: '•';
+            color: var(--color-acento);
+            font-weight: bold;
+        }
+
+        .oferta-precio {
+            font-size: 26px;
+            font-weight: 800;
+            color: #b45309;
+            margin-bottom: 20px;
+            text-align: right;
+            border-top: 1px solid var(--gris-claro);
+            padding-top: 10px;
+        }
+
+        .btn-comprar-oferta {
+            width: 100%;
+            background-color: var(--color-acento);
+            color: white;
+            border: none;
+            padding: 12px;
+            font-size: 15px;
+            font-weight: bold;
+            border-radius: 6px;
+            cursor: pointer;
+            text-transform: uppercase;
+            transition: background 0.3s, transform 0.2s;
+        }
+
+        .btn-comprar-oferta:hover {
+            background-color: #9a4004;
+            transform: scale(1.02);
+        }
+
         /* --- FOOTER --- */
         footer {
             background-color: var(--color-principal);
@@ -291,9 +393,7 @@
             </ul>
         </nav>
 
-        <!-- Este es un seccion que invoca ala la ruta 
-         localhost:8080/iniciar_sesion Por defecto es GET -->
-        <a th:href="@{/iniciar_sesion}" class="btn-admin-login">
+        <a th:href="@{/iniciar_sesion/}" class="btn-admin-login">
             <i class="fa-solid fa-lock"></i> Iniciar Sesión (Admin)
         </a>
     </div>
@@ -308,7 +408,6 @@
 <section class="seccion">
     <h2 class="titulo-seccion">Explora por Categorías</h2>
     <div class="grid-categorias">
-
         <a href="#" class="tarjeta-categoria"><i class="fa-solid fa-couch"></i>Salas de Estar</a>
         <a href="#" class="tarjeta-categoria"><i class="fa-solid fa-chair"></i>Comedores</a>
         <a href="#" class="tarjeta-categoria"><i class="fa-solid fa-bed"></i>Dormitorios</a>
@@ -319,54 +418,44 @@
 <section class="seccion" id="productos">
     <h2 class="titulo-seccion">Nuestros Muebles Destacados</h2>
     <div class="grid-productos">
-<div class="productos-contenedor">
-        
         <div class="producto-card" th:each="prod : ${productos}">
             <img th:src="${prod.imagenReferencia}" class="producto-imagen" th:alt="${prod.descripcion}">
-            
             <div class="producto-info">
                 <h3 class="producto-titulo" th:text="${prod.descripcion}">Nombre del Producto</h3>
-                
                 <div class="producto-precio" th:text="'S/ ' + ${#numbers.formatDecimal(prod.precio, 1, 2)}">S/ 0.00</div>
-                
                 <a th:href="@{/carrito/agregar(id=${prod.idProducto})}" class="btn-agregar-carrito">Añadir al carrito</a>
             </div>
-            
         </div>
-
-    </div>
     </div>
 </section>
 
-<section class="section" id="ofertas">
-    <h2 class="seccion-titulo">Combos y Ofertas Especiales</h2>
-    
+<section class="seccion" id="ofertas">
+    <h2 class="titulo-seccion">Combos y Ofertas Especiales</h2>
+
     <div class="ofertas-contenedor">
-        
         <div class="oferta-card" th:each="ofe : ${ofertas}">
-            
+
             <div class="oferta-info">
                 <h3 class="oferta-titulo" th:text="'Combo Especial N° ' + ${ofe.idOferta}">Combo Promocional</h3>
-                
+
                 <div class="oferta-incluye">
-                    <p><strong>Incluye:</strong></p>
+                    <p><strong>Incluye los siguientes productos:</strong></p>
                     <ul>
                         <li th:each="det : ${ofe.detalles}">
                             <span th:text="${det.cantidad} + 'x ' + ${det.producto.descripcion}">1x Sofá Gris</span>
                         </li>
                     </ul>
                 </div>
-                
+
                 <div class="oferta-precio" th:text="'S/ ' + ${#numbers.formatDecimal(ofe.precioOferta, 1, 2)}">S/ 0.00</div>
-                
+
                 <form th:action="@{/comprarOferta}" method="POST">
                     <input type="hidden" name="id_oferta" th:value="${ofe.idOferta}" />
                     <button type="submit" class="btn-comprar-oferta">Comprar Oferta Express</button>
                 </form>
             </div>
-            
+
         </div>
-        
     </div>
 </section>
 

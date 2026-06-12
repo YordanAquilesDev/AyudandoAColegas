@@ -55,7 +55,7 @@
 
 <div class="login-container">
     <h2>Iniciar Sesión</h2>
-    <form action="@/iniciar-sesion/autenticarse" method="POST">
+    <form th:action="@{/iniciar_sesion/autenticarse}" method="POST">
         <div class="form-group">
             <label for="username">Usuario:</label>
             <input type="text" id="username" name="usuario" required>
