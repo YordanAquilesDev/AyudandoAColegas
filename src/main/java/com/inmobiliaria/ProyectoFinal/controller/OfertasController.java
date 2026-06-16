@@ -34,10 +34,6 @@ public class OfertasController{
 
     }
 
-    @PostMapping("/GuardarOferta")
-    public String GuardarOferta(){
-     return "redirect/html/GuardarOferta";
-    }
 
     @PostMapping("/comprar/{id}")
     public String  comprarOgerta(){

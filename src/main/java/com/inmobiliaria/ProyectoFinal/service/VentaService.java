@@ -1,5 +1,6 @@
 package com.inmobiliaria.ProyectoFinal.service;
 
+import com.inmobiliaria.ProyectoFinal.entity.DetalleOferta;
 import com.inmobiliaria.ProyectoFinal.entity.Ofertas;
 import com.inmobiliaria.ProyectoFinal.entity.Productos;
 import com.inmobiliaria.ProyectoFinal.repository.OfertaRepository;
@@ -11,31 +12,46 @@ import java.util.List;
 
 @Service
 public class VentaService {
-    private ProductosService productosService;
-    private OfertasService ofertasService;
+
+    private final ProductosService productosService;
+    private final OfertasService ofertasService;
+    private final UsuarioRepository usuarioRepository;
+    public VentaService(ProductosService productosService, OfertasService ofertasService, UsuarioRepository usuarioRepository) {
+        this.productosService = productosService;
+        this.ofertasService = ofertasService;
+        this.usuarioRepository = usuarioRepository;
+    }
 
 
-    public boolean RegistrarVenta(List<Productos> productos,String tipoVenta){
-        if(tipoVenta.equals("productos")){
-            List<Productos> productosActualizados = new ArrayList();
+    public boolean RegistrarVenta(List<Productos> productos){
+
+            List<Productos> productosActualizados = new ArrayList<>();
             for(Productos producto:productos){
                 producto.setCantidad(producto.getCantidad()-1);
                 Productos productoss = productosService.actualizar(producto);
                 productosActualizados.add(productoss);
             }
             return !productosActualizados.isEmpty();
-        }else{
-           return false;
 
-
-        }
 
     }
 
 
     public boolean RegistrarVenta(Integer id_oferta){
+        Ofertas ofe= ofertasService.obtenerOfertaPorId(id_oferta);
+        if(ofe==null){
+            return false;
+        }else{
+            for(DetalleOferta deta: ofe.getDetalles()){
+                Productos pAntesDeActualizar= deta.getProducto();
+                pAntesDeActualizar.setCantidad(pAntesDeActualizar.getCantidad()-deta.getCantidad());
+                Productos productosActualizados=productosService.guardar(pAntesDeActualizar);
+            }
 
-        return true;
+            return  true;
+        }
+
+
     }
 
 }

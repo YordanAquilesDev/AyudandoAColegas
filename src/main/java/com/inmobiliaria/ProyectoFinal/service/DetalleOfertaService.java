@@ -20,4 +20,7 @@ public class DetalleOfertaService {
         return detalleOfertaRepository.findAll();
     }
 
+    public DetalleOferta traerPorId(Integer id){
+        return detalleOfertaRepository.findById(id).orElse(null);
+    }
 }

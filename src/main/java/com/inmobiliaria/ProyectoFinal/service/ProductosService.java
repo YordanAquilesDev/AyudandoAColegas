@@ -11,7 +11,8 @@ import java.util.Optional;
 public class ProductosService {
     
 
-    private ProductoRepository productoRepository;
+    private final ProductoRepository productoRepository;
+
     public ProductosService(ProductoRepository productoRepository) {
         this.productoRepository = productoRepository;
     }

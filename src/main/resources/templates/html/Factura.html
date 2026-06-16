@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Comprobante de Venta</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f9;
+            color: #333;
+        }
+        .invoice-box {
+            max-width: 800px;
+            margin: auto;
+            padding: 30px;
+            border: 1px solid #eee;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
+            background-color: #fff;
+        }
+        .header-table {
+            width: 100%;
+            margin-bottom: 20px;
+            border-collapse: collapse;
+        }
+        .header-table td {
+            vertical-align: top;
+        }
+        .empresa-info {
+            width: 60%;
+        }
+        .boleta-info {
+            width: 40%;
+            border: 2px solid #333;
+            text-align: center;
+            padding: 15px;
+            background-color: #f9f9f9;
+        }
+        .boleta-info h2 {
+            margin: 0 0 10px 0;
+            letter-spacing: 2px;
+        }
+        .details-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 30px;
+        }
+        .details-table th {
+            background-color: #343a40;
+            color: #fff;
+            padding: 10px;
+            text-align: left;
+        }
+        .details-table td {
+            padding: 10px;
+            border-bottom: 1px solid #eed;
+        }
+        .total-section {
+            text-align: right;
+            margin-top: 20px;
+            font-size: 1.2em;
+        }
+        .total-section span {
+            font-weight: bold;
+            color: #000;
+        }
+        .footer {
+            margin-top: 50px;
+            text-align: center;
+            font-size: 0.9em;
+            color: #777;
+        }
+    </style>
+</head>
+<body>
+
+<div class="invoice-box">
+    <table class="header-table">
+        <tr>
+            <td class="empresa-info">
+                <h1 style="margin: 0; color: #2c3e50;" th:text="${ofertas.nombreEmpresa}">Nombre Empresa</h1>
+                <p>
+                    <strong th:text="${ofertas.razonSocial}">Razon Social S.A.C.</strong><br>
+                    Dirección: <span th:text="${ofertas.direccion}">Direccion de la empresa</span><br>
+                    Teléfono: <span th:text="${ofertas.telefono}">123456789</span><br>
+                    Email: <span th:text="${ofertas.correo}">contacto@empresa.com</span>
+                </p>
+            </td>
+            <td class="boleta-info">
+                <h2>BOLETA DE VENTA</h2>
+                <p><strong>R.U.C. N°:</strong> <span th:text="${ofertas.ruc}">00000000000</span></p>
+                <p><strong>N° Oferta:</strong> <span th:text="${producto.idOferta}">001</span></p>
+            </td>
+        </tr>
+    </table>
+
+    <hr>
+
+    <h3 style="margin-top: 25px;">Detalle de la Compra</h3>
+    <table class="details-table">
+        <thead>
+        <tr>
+            <th>Item / Producto</th>
+            <th style="text-align: center;">Cantidad</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="det : ${producto.detalles}">
+            <td th:text="${det.producto.descripcion}">Nombre del Producto</td>
+            <td style="text-align: center;" th:text="${det.cantidad}">1</td>
+        </tr>
+        </tbody>
+    </table>
+
+    <div class="total-section">
+        <p>Total a Pagar: <span th:text="'S/ ' + ${producto.precioOferta}">S/ 0.00</span></p>
+    </div>
+
+    <div class="footer">
+        <p>¡Gracias por su compra en nuestra inmobiliaria!</p>
+    </div>
+</div>
+
+</body>
+</html>

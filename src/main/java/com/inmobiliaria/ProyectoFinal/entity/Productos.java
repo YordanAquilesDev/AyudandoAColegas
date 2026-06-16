@@ -15,6 +15,8 @@ public class Productos {
     @Column(name="id_producto")
     private int idProducto;
 
+
+
     private String descripcion;
 
     @Column(name = "precio", columnDefinition = "DECIMAL(10,2)")

@@ -18,21 +18,7 @@ public class CategoriaController {
         this.categoriaService = categoriaService;
     }
 
-    // 1. EL QUE GUARDA (POST)
-    @PostMapping("/guardar")
-    public String guardarNuevaCategoria(Categoria categoria, RedirectAttributes redirectAttributes) {
-        try {
-            categoriaService.guardar(categoria);
 
-            redirectAttributes.addFlashAttribute("mensajeExito", "¡Categoría guardada con éxito!");
-
-            return "redirect:/categorias/lista";
-
-        } catch (IllegalArgumentException e) {
-            redirectAttributes.addFlashAttribute("mensajeError", e.getMessage());
-            return "redirect:/categorias/formulario";
-        }
-    }
 
 
     @GetMapping("/lista")

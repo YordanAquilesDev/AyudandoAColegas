@@ -9,8 +9,8 @@
     <style>
         /* --- VARIABLES DE DISEÑO (Estilo Hogar y Spacios) --- */
         :root {
-            --color-principal: #1e293b; /* Azul oscuro elegante */
-            --color-acento: #b45309;    /* Dorado/Marrón de muebles premium */
+            --color-principal: #1e293b;
+            --color-acento: #b45309;
             --color-fondo: #f8fafc;
             --color-texto: #334155;
             --gris-claro: #e2e8f0;
@@ -26,9 +26,10 @@
         body {
             background-color: var(--color-fondo);
             color: var(--color-texto);
+            /* Suaviza el salto del ancla para que no sea un golpe brusco */
+            scroll-behavior: smooth;
         }
 
-        /* --- HEADER & NAVEGACIÓN --- */
         header {
             background-color: white;
             box-shadow: 0 2px 10px rgba(0,0,0,0.05);
@@ -78,11 +79,8 @@
             transition: color 0.3s;
         }
 
-        .menu-navegacion a:hover {
-            color: var(--color-acento);
-        }
+        .menu-navegacion a:hover { color: var(--color-acento); }
 
-        /* 🌟 BOTÓN DE INICIAR SESIÓN (ADMIN) */
         .btn-admin-login {
             background-color: transparent;
             border: 2px solid var(--color-principal);
@@ -104,7 +102,6 @@
             transform: translateY(-2px);
         }
 
-        /* --- HERO BANNER (PORTADA) --- */
         .hero {
             background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?q=80&w=1200') no-repeat center center/cover;
             height: 450px;
@@ -142,7 +139,6 @@
 
         .btn-comprar:hover { background-color: #9a4004; }
 
-        /* --- SECCIÓN CATEGORÍAS --- */
         .seccion {
             max-width: 1200px;
             margin: 60px auto;
@@ -198,7 +194,6 @@
             display: block;
         }
 
-        /* --- GRID DE PRODUCTOS --- */
         .grid-productos {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -226,9 +221,7 @@
             background-color: #f1f5f9;
         }
 
-        .producto-info {
-            padding: 20px;
-        }
+        .producto-info { padding: 20px; }
 
         .producto-titulo {
             font-size: 18px;
@@ -257,11 +250,8 @@
             transition: background 0.3s;
         }
 
-        .btn-agregar-carrito:hover {
-            background-color: var(--color-acento);
-        }
+        .btn-agregar-carrito:hover { background-color: var(--color-acento); }
 
-        /* --- 🌟 NUEVOS ESTILOS PARA LA SECCIÓN DE COMBOS Y OFERTAS --- */
         .ofertas-contenedor {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
@@ -271,7 +261,7 @@
 
         .oferta-card {
             background-color: white;
-            border: 2px dashed var(--color-acento); /* Borde distinguible de combo */
+            border: 2px dashed var(--color-acento);
             border-radius: 12px;
             padding: 25px;
             box-shadow: 0 4px 15px rgba(180, 83, 9, 0.05);
@@ -296,12 +286,10 @@
             gap: 8px;
         }
 
-        .oferta-titulo::before {
-            content: '🔥';
-        }
+        .oferta-titulo::before { content: '🔥'; }
 
         .oferta-incluye {
-            background-color: #fffbeb; /* Fondo sutil cálido */
+            background-color: #fffbeb;
             border-radius: 8px;
             padding: 15px;
             margin-bottom: 20px;
@@ -363,7 +351,6 @@
             transform: scale(1.02);
         }
 
-        /* --- FOOTER --- */
         footer {
             background-color: var(--color-principal);
             color: white;
@@ -383,7 +370,6 @@
 <header>
     <div class="nav-contenedor">
         <a href="/" class="logo">Hogar<span>&Espacios</span></a>
-
         <nav>
             <ul class="menu-navegacion">
                 <li><a href="#">Salas</a></li>
@@ -392,7 +378,6 @@
                 <li><a href="#">Oficina</a></li>
             </ul>
         </nav>
-
         <a th:href="@{/iniciar_sesion/}" class="btn-admin-login">
             <i class="fa-solid fa-lock"></i> Iniciar Sesión (Admin)
         </a>
@@ -423,7 +408,9 @@
             <div class="producto-info">
                 <h3 class="producto-titulo" th:text="${prod.descripcion}">Nombre del Producto</h3>
                 <div class="producto-precio" th:text="'S/ ' + ${#numbers.formatDecimal(prod.precio, 1, 2)}">S/ 0.00</div>
-                <a th:href="@{/carrito/agregar(id=${prod.idProducto})}" class="btn-agregar-carrito">Añadir al carrito</a>
+
+                <a th:href="@{/agregar/carrito(id=${prod.idProducto})}"
+                   class="btn-agregar-carrito">Añadir al carrito</a>
             </div>
         </div>
     </div>
@@ -431,13 +418,11 @@
 
 <section class="seccion" id="ofertas">
     <h2 class="titulo-seccion">Combos y Ofertas Especiales</h2>
-
     <div class="ofertas-contenedor">
+        <!-- OFERTAS-->
         <div class="oferta-card" th:each="ofe : ${ofertas}">
-
             <div class="oferta-info">
                 <h3 class="oferta-titulo" th:text="'Combo Especial N° ' + ${ofe.idOferta}">Combo Promocional</h3>
-
                 <div class="oferta-incluye">
                     <p><strong>Incluye los siguientes productos:</strong></p>
                     <ul>
@@ -446,15 +431,31 @@
                         </li>
                     </ul>
                 </div>
-
                 <div class="oferta-precio" th:text="'S/ ' + ${#numbers.formatDecimal(ofe.precioOferta, 1, 2)}">S/ 0.00</div>
-
+                <!-- COMPRAR OFERTA -->
                 <form th:action="@{/comprarOferta}" method="POST">
                     <input type="hidden" name="id_oferta" th:value="${ofe.idOferta}" />
                     <button type="submit" class="btn-comprar-oferta">Comprar Oferta Express</button>
                 </form>
             </div>
+        </div>
+    </div>
+</section>
 
+<section class="seccion" id="carrito-compras">
+    <h2 class="titulo-seccion">Tu Carrito de Compras</h2>
+
+    <div th:if="${#lists.isEmpty(elementosEnCarrito)}" style="text-align: center; color: gray;">
+        <p>El carrito está vacío actualmente.</p>
+    </div>
+
+    <div class="grid-productos" th:unless="${#lists.isEmpty(elementosEnCarrito)}">
+        <div class="producto-card" th:each="item : ${elementosEnCarrito}">
+            <img th:src="${item.imagenReferencia}" class="producto-imagen" th:alt="${item.descripcion}">
+            <div class="producto-info">
+                <h3 class="producto-titulo" th:text="${item.descripcion}">Nombre</h3>
+                <div class="producto-precio" th:text="'S/ ' + ${#numbers.formatDecimal(item.precio, 1, 2)}">S/ 0.00</div>
+            </div>
         </div>
     </div>
 </section>
